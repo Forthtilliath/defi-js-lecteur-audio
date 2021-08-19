@@ -1,6 +1,8 @@
 var player;
+const progressbar = document.querySelector('#progressBar');
 
 function onYouTubePlayerAPIReady() {
+    console.log('onYouTubePlayerAPIReady');
     player = new YT.Player('video', {
         events: {
             'onReady': onPlayerReady,
@@ -22,11 +24,9 @@ function onPlayerReady(event) {
     });
 }
 
-function progress(percent, $element) {
-    var progressBarWidth = percent * $element.width() / 100;
-    $element.find('div').animate({ 
-        width: progressBarWidth 
-    });
+function progress2(percent, element) {
+    var progressBarWidth = percent * element.getBoundingClientRect().width / 100;
+    element.querySelector('div').style.width = progressBarWidth + 'px';
 }
 
 function onPlayerStateChange(event) {
@@ -35,18 +35,9 @@ function onPlayerStateChange(event) {
         var mytimer = setInterval(function() {
             var playerCurrentTime = player.getCurrentTime();
             var playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
-            console.log(playerCurrentTime);
-            progress(playerTimeDifference, $('#progressBar'));
+            progress2(playerTimeDifference, progressbar);
         }, 1000);        
     } else {
         clearTimeout(mytimer);
     }
 }
-
-
-
-var tag = document.createElement('script');
-tag.src = "//www.youtube.com/player_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-// onYouTubePlayerAPIReady();

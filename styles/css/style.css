@@ -107,3 +107,7 @@ body {
 .footer .controls button:last-child {
   border-left: 1px solid #EEE;
 }
+
+#progressBar div {
+  transition: width 0.3s linear;
+}
