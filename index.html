@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
+    <link rel="stylesheet" href="styles/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="display hidden">
+          <iframe id="video" src="//www.youtube.com/embed/sEQf5lcnj_o?controls=0&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1&amp;html5=1" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+        <footer class="footer"><img class="thumb" src="https://img.youtube.com/vi/sEQf5lcnj_o/mqdefault.jpg"/>
+          <div class="bar">
+            <div id="progressBar">
+              <div></div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="icon-fast-backward"></button>
+            <button class="icon-play" id="play"></button>
+            <button class="icon-pause" id="pause"></button>
+            <button class="icon-fast-forward"></button>
+          </div>
+        </footer>
+      </div>
+      <script src="scripts/js/index.js"></script>
+</body>
+</html>
