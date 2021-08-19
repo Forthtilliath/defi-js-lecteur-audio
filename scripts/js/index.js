@@ -1,43 +1,41 @@
-var player;
+"use strict";
+let player;
+const playButton = document.querySelector('#play');
+const pauseButton = document.querySelector('#pause');
 const progressbar = document.querySelector('#progressBar');
-
 function onYouTubePlayerAPIReady() {
-    console.log('onYouTubePlayerAPIReady');
     player = new YT.Player('video', {
         events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+        },
     });
 }
-
-function onPlayerReady(event) {
-    var playButton = document.getElementById("play"),
-        pauseButton = document.getElementById("pause");
-    
-    playButton.addEventListener("click", function () {
+function onPlayerReady() {
+    playButton === null || playButton === void 0 ? void 0 : playButton.addEventListener('click', function () {
         player.playVideo();
     });
-  
-    pauseButton.addEventListener("click", function() {
+    pauseButton === null || pauseButton === void 0 ? void 0 : pauseButton.addEventListener('click', function () {
         player.pauseVideo();
     });
 }
-
-function progress2(percent, element) {
-    var progressBarWidth = percent * element.getBoundingClientRect().width / 100;
-    element.querySelector('div').style.width = progressBarWidth + 'px';
+function progress(percent, element) {
+    var progressBarWidth = (percent * (element === null || element === void 0 ? void 0 : element.getBoundingClientRect().width)) / 100;
+    const div = element.querySelector('div');
+    if (div)
+        div.style.width = progressBarWidth + 'px';
 }
-
 function onPlayerStateChange(event) {
+    let mytimer;
     if (event.data == YT.PlayerState.PLAYING) {
-        var playerTotalTime = player.getDuration();
-        var mytimer = setInterval(function() {
-            var playerCurrentTime = player.getCurrentTime();
-            var playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
-            progress2(playerTimeDifference, progressbar);
-        }, 1000);        
-    } else {
+        let playerTotalTime = player.getDuration();
+        mytimer = setInterval(function () {
+            let playerCurrentTime = player.getCurrentTime();
+            let playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
+            progressbar && progress(playerTimeDifference, progressbar);
+        }, 1000);
+    }
+    else {
         clearTimeout(mytimer);
     }
 }
