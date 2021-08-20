@@ -151,7 +151,7 @@ interface YouTubePlayer {
     playVideoAt(index: number): void;
     previousVideo(): void;
     removeEventListener(event: string, listener: (event: CustomEvent) => void): void;
-    seekTo(seconds: number, allowSeekAhead: boolean): void;
+    seekTo(seconds: number, allowSeekAhead?: boolean): void;
     setLoop(loopPlaylists: boolean): void;
     setPlaybackQuality(suggestedQuality: string): void;
     setPlaybackRate(suggestedRate: number): void;

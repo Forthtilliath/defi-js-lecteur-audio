@@ -72,6 +72,7 @@ header .logo {
   align-items: center;
   justify-content: center;
   width: 100%;
+  background-color: black;
 }
 .container .playerContainer .thumbWrapper .thumb {
   width: 100%;
@@ -91,6 +92,7 @@ header .logo {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  cursor: pointer;
 }
 .container .playerContainer .progressBarContainer .progressBarWrapper .progressBar {
   height: 100%;
@@ -109,4 +111,5 @@ header .logo {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  cursor: pointer;
 }

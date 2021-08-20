@@ -63,6 +63,7 @@ header {
         .thumbWrapper {
             @include center(center);
             width: 100%;
+            background-color: black;
 
             .thumb {
                 width: 100%;
@@ -81,6 +82,7 @@ header {
                 height: 10px;
                 overflow: hidden;
                 @include center();
+                cursor: pointer;
 
                 .progressBar {
                     height: 100%;
@@ -96,6 +98,7 @@ header {
 
             .controlButton {
                 @include circle(50);
+                cursor: pointer;
             }
         }
     }
