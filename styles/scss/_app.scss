@@ -1,9 +1,3 @@
-$black: #181a1b;
-$red: #cc0000;
-$white: #f2f2f2;
-
-$heightHeader: 60px;
-
 html,
 body {
     width: 100%;
@@ -45,7 +39,7 @@ header {
 
 .container {
     @include center(center);
-    min-height: calc(100vh - #{$heightHeader});
+    min-height: calc(100vh - #{$heightHeader} - #{$heightFooter});
     height: auto;
 
     .playerWrapper {
@@ -88,7 +82,7 @@ header {
                     height: 100%;
                     width: 0;
                     background-color: $red;
-                    transition: width 0.1s linear ;
+                    transition: width 0.1s linear;
                 }
             }
         }
@@ -100,6 +94,34 @@ header {
                 @include circle(50);
                 cursor: pointer;
             }
+        }
+    }
+}
+
+footer {
+    @include center(center);
+    color: $white;
+    height: $heightFooter;
+    font-size: 16px;
+
+    a {
+        outline: none;
+        text-decoration: none;
+        padding: 0 3px;
+        transition: all 0.3s;
+
+        &:visited,
+        &:link {
+            color: $white;
+        }
+
+        &:focus,
+        &:hover,
+        &:active {
+            color: $red;
+            border-top: 1px solid $red;
+            border-bottom: 1px solid $red;
+            background-color: rgba($white, 0.1);
         }
     }
 }
