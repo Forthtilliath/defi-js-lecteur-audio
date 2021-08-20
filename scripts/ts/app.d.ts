@@ -12,26 +12,6 @@ interface EPlayerStates {
     VIDEO_CUED: number = 5;
 }
 
-interface IYoutubePlayer {
-    height?: number;
-    width?: number;
-    videoId?: string;
-    playerVars?: {
-        autoplay?: number;
-        controls?: number;
-        showinfo?: number;
-        rel?: number;
-    };
-    events?: {
-        onReady: (event: { target: IPlayer }) => void;
-        onStateChange: (event: { data: number }) => void;
-    };
-}
-
-interface IframeApiType {
-    Player: { new (elementId: string, options: Options): YouTubePlayer };
-}
-
 interface Options {
     width?: number | string | undefined;
     height?: number | string | undefined;

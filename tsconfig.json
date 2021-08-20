@@ -10,8 +10,8 @@
         "pretty": true,
         "removeComments": true,
         "composite": false,
-        "declaration": true,
-        "declarationDir": "./scripts/types"
+        "declaration": false,
+        // "declarationDir": "./scripts/types"
     },
     "include": ["./scripts/ts/*"],
     "exclude": ["node_modules", "scripts/js"]
