@@ -1,9 +1,8 @@
-let player: { playVideo: () => void; pauseVideo: () => void; getDuration: () => any; getCurrentTime: () => any };
-
+"use strict";
+let player;
 const playButton = document.querySelector('#play');
 const pauseButton = document.querySelector('#pause');
 const progressbar = document.querySelector('#progressBar');
-
 function onYouTubePlayerAPIReady() {
     player = new YT.Player('video', {
         events: {
@@ -12,24 +11,21 @@ function onYouTubePlayerAPIReady() {
         },
     });
 }
-
 function onPlayerReady() {
-    playButton?.addEventListener('click', function () {
+    playButton === null || playButton === void 0 ? void 0 : playButton.addEventListener('click', function () {
         player.playVideo();
     });
-
-    pauseButton?.addEventListener('click', function () {
+    pauseButton === null || pauseButton === void 0 ? void 0 : pauseButton.addEventListener('click', function () {
         player.pauseVideo();
     });
 }
-
-function progress(percent: number, element: Element) {
-    var progressBarWidth = (percent * element?.getBoundingClientRect().width) / 100;
+function progress(percent, element) {
+    var progressBarWidth = (percent * (element === null || element === void 0 ? void 0 : element.getBoundingClientRect().width)) / 100;
     const div = element.querySelector('div');
-    if (div) div.style.width = progressBarWidth + 'px';
+    if (div)
+        div.style.width = progressBarWidth + 'px';
 }
-
-function onPlayerStateChange(event: { data: any }) {
+function onPlayerStateChange(event) {
     let mytimer;
     if (event.data == YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
@@ -38,7 +34,8 @@ function onPlayerStateChange(event: { data: any }) {
             let playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
             progressbar && progress(playerTimeDifference, progressbar);
         }, 1000);
-    } else {
+    }
+    else {
         clearTimeout(mytimer);
     }
 }

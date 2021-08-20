@@ -10,21 +10,12 @@ declare const YT: {
                 controls?: number;
                 showinfo?: number;
                 rel?: number;
-            };
+            }
             events?: {
-                onReady: (event: { target: { playVideo: () => void } }) => void;
+                onReady: () => void;
                 onStateChange: (event: { data: any }) => void;
             };
         },
-    ) => IPlayer;
-    PlayerState: { UNSTARTED: number; PLAYING: number; ENDED: number; PAUSED: number; BUFFERING:number };
+    ) => { playVideo: () => void; pauseVideo: () => void; getDuration: () => any; getCurrentTime: () => any };
+    PlayerState: { PLAYING: number;ENDED:number };
 };
-
-declare interface IPlayer {
-    loadVideoById: (arg0: string) => void;
-    playVideo: () => void;
-    stopVideo: () => void;
-    pauseVideo: () => void;
-    getDuration: () => number;
-    getCurrentTime: () => number;
-}

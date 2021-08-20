@@ -41,6 +41,7 @@ body {
 .footer {
     position: relative;
     background: #fff;
+
     .thumb {
         position: absolute;
         top: 50%;
@@ -88,5 +89,57 @@ body {
                 border-left: 1px solid #eee;
             }
         }
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.container {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
+    background-color: black;
+    border-radius: 5px;
+    width: 50%;
+    min-width: 400px;
+
+    .thumbWrapper {
+        @include center(center);
+        width: 100%;
+
+        .thumb {
+            width: 100%;
+            max-width: 480px;
+            height: 360px;
+            object-fit: contain;
+            border-radius: 5px 5px 0 0;
+        }
+    }
+    .bar {
+        background-color: #ddd;
+        width: 100%;
+        padding: 2px;
+
+        #progressBar {
+            height: 10px;
+            overflow: hidden;
+            @include center();
+
+            div {
+                height: 100%;
+                width: 0;
+                background-color: #cc0000;
+                transition: width 0.3s linear;
+            }
+        }
+    }
+    .controls {
+      @include center(space-around);
+      padding: 10px;
+
+      .controlButton {
+        @include circle(50);
+
+      }
     }
 }

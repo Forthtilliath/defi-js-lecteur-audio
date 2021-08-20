@@ -10,7 +10,7 @@
         <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
     </head>
     <body>
-        <div class="container">
+        <!-- <div class="container">
             <div class="display hidden">
                 <iframe
                     id="video"
@@ -32,9 +32,28 @@
                     <button class="icon-fast-forward"></button>
                 </div>
             </footer>
+        </div> -->
+
+        <div class="container">
+            <div id="player" class="hidden"></div>
+            <div class="thumbWrapper">
+
+              <img class="thumb" src="https://img.youtube.com/vi/sEQf5lcnj_o/hqdefault.jpg" />
+            </div>
+            <div class="bar">
+                <div id="progressBar">
+                    <div></div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="controlButton icon-fast-backward" id="btn_prev"></button>
+                <button class="controlButton icon-play" id="btn_play"></button>
+                <button class="controlButton icon-pause hidden" id="btn_pause"></button>
+                <button class="controlButton icon-fast-forward" id="btn_next"></button>
+                <!-- TODO Volume -->
+            </div>
         </div>
 
-        
-        <script src="scripts/js/index.js"></script>
+        <script src="scripts/js/index2.js"></script>
     </body>
 </html>
