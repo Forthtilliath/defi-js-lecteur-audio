@@ -1,33 +1,43 @@
-let player: IPlayer;
+let player: YouTubePlayer;
+let mytimer: number;
 
 const btn_prev: HTMLButtonElement | null = document.querySelector('#btn_prev');
 const btn_play: HTMLButtonElement | null = document.querySelector('#btn_play');
 const btn_pause: HTMLButtonElement | null = document.querySelector('#btn_pause');
-const btn_next : HTMLButtonElement | null= document.querySelector('#btn_next');
-const btn_stop : HTMLButtonElement | null= document.querySelector('#btn_stop');
+const btn_next: HTMLButtonElement | null = document.querySelector('#btn_next');
+const btn_stop: HTMLButtonElement | null = document.querySelector('#btn_stop');
+const playerWrapper: HTMLDivElement = document.querySelector('.playerWrapper') as HTMLDivElement;
+const thumbWrapper: HTMLDivElement = document.querySelector('.thumbWrapper') as HTMLDivElement;
 const progressBarWrapper: HTMLDivElement | null = document.querySelector('.progressBarWrapper');
 const progressBar: HTMLDivElement | null = document.querySelector('.progressBar');
 const thumb: HTMLImageElement | null = document.querySelector('.thumb');
 
-const arrSongs = ['sEQf5lcnj_o', 'TVJDsACd54I'];
-let arrIndex = 0;
+// const arrSongs = ['MPVq30bPq6I', 'sEQf5lcnj_o', 'TVJDsACd54I'];
+// let arrIndex = 0;
 
-const playerActions = {
+const playerControl = {
     autoPlay: false,
+    video: false,
+    arrSongs: [ 'aR-KAldshAE', 'MPVq30bPq6I','TVJDsACd54I'],
+    arrIndex: 0,
+    nbSongs: () => playerControl.arrSongs.length,
+
+    getCurrentSong: () => playerControl.arrSongs[playerControl.arrIndex],
+
     play: (): void => {
         player.playVideo();
-        playerActions.showPlay(false);
+        playerControl.showPlay(false);
     },
     pause: () => {
         player.pauseVideo();
-        playerActions.showPlay(true);
+        playerControl.showPlay(true);
     },
     stop: () => {
         player.stopVideo();
-        playerActions.showPlay(true);
-        if(progressBarWrapper) progress(0, progressBarWrapper);
+        playerControl.showPlay(true);
+        if (progressBarWrapper) playerControl.progress(0);
     },
-    showPlay: (showPlay:boolean) => {
+    showPlay: (showPlay: boolean) => {
         if (showPlay) {
             btn_play?.classList.remove('hidden');
             btn_pause?.classList.add('hidden');
@@ -37,35 +47,58 @@ const playerActions = {
         }
     },
     prev: () => {
-        arrIndex = (arrIndex + arrSongs.length - 1) % arrSongs.length;
-        playerActions.changeVideo();
+        playerControl.arrIndex = (playerControl.arrIndex + playerControl.nbSongs() - 1) % playerControl.nbSongs();
+        playerControl.changeVideo();
     },
     next: () => {
-        arrIndex = (arrIndex + arrSongs.length + 1) % arrSongs.length;
-        playerActions.changeVideo();
+        playerControl.arrIndex = (playerControl.arrIndex + playerControl.nbSongs() + 1) % playerControl.nbSongs();
+        playerControl.changeVideo();
     },
-    changeVideo: () => {
-        player.loadVideoById(arrSongs[arrIndex]);
-        playerActions.showPlay(false);
-        if (thumb) thumb.src = `https://img.youtube.com/vi/${arrSongs[arrIndex]}/hqdefault.jpg`;
-    },
-    changeThumb: () => {
 
+    timer: (e: MouseEvent) => {
+        const currentTime = e.offsetX;
+        // player.setCurrentTime(currentTime);
+        let playerPercent = progressBarWrapper
+            ? (currentTime / progressBarWrapper?.getBoundingClientRect().width) * 100
+            : 0;
+        
+        if (progressBarWrapper) playerControl.progress(playerPercent);
+    },
+
+    changeVideo: () => {
+        player.loadVideoById(playerControl.getCurrentSong());
+        playerControl.showPlay(false);
+        playerControl.changeThumb();
+    },
+
+    changeThumb: () => {
+        if (thumb) thumb.src = `https://img.youtube.com/vi/${playerControl.getCurrentSong()}/hqdefault.jpg`;
+    },
+
+    progress: (percent: number) => {
+        if (progressBarWrapper) {
+            const progressBarWidth = (percent * progressBarWrapper?.getBoundingClientRect().width) / 100;
+            if (progressBar) {
+                progressBar.style.transitionDuration = progressBarWidth === 0 ? '0s' : '0.1s';
+                progressBar.style.width = progressBarWidth + 'px';
+            }
+        }
+    },
+
+    setDisplay: () => {
+        if (playerControl.video) {
+            playerWrapper.classList.remove('hidden');
+            thumbWrapper.classList.add('hidden');
+        }
     }
 };
+
+playerControl.changeThumb();
 
 /**Fonction de l'API Youtube, lancée automatiquement une fois l'API chargée */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        height: 0,
-        width: 0,
-        videoId: arrSongs[arrIndex],
-        playerVars: {
-            autoplay: 0,
-            controls: 1,
-            showinfo: 0,
-            rel: 0,
-        },
+        videoId: playerControl.getCurrentSong(),
         events: {
             onReady: onPlayerReady,
             onStateChange: onPlayerStateChange,
@@ -74,30 +107,25 @@ function onYouTubeIframeAPIReady() {
 }
 
 /** Est lancé une fois l'API prête à lancer la vidéo/musique */
-function onPlayerReady() {
-    //event.target.playVideo();
-    btn_prev?.addEventListener('click', playerActions.prev);
-    btn_play?.addEventListener('click', playerActions.play);
-    btn_pause?.addEventListener('click', playerActions.pause);
-    btn_stop?.addEventListener('click', playerActions.stop);
-    btn_next?.addEventListener('click', playerActions.next);
+function onPlayerReady(event: { target: YouTubePlayer }) {
+    if (playerControl.autoPlay) event.target.playVideo();
+    btn_prev?.addEventListener('click', playerControl.prev);
+    btn_play?.addEventListener('click', playerControl.play);
+    btn_pause?.addEventListener('click', playerControl.pause);
+    btn_stop?.addEventListener('click', playerControl.stop);
+    btn_next?.addEventListener('click', playerControl.next);
+    progressBarWrapper?.addEventListener('click', playerControl.timer);
 }
 
-function onPlayerStateChange(event: { data: any }) {
-    let mytimer;
+function onPlayerStateChange(event: { data: number }) {
     if (event.data === YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
         mytimer = setInterval(function () {
             let playerCurrentTime = player.getCurrentTime();
-            let playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
-            if (progressBarWrapper) progress(playerTimeDifference, progressBarWrapper);
-        }, 1000);
+            let playerPercent = (playerCurrentTime / playerTotalTime) * 100;
+            if (progressBarWrapper) playerControl.progress(playerPercent);
+        }, 100);
     } else {
         clearTimeout(mytimer);
     }
-}
-
-function progress(percent: number, element: Element) {
-    var progressBarWidth = (percent * element?.getBoundingClientRect().width) / 100;
-    if (progressBar) progressBar.style.width = progressBarWidth + 'px';
 }

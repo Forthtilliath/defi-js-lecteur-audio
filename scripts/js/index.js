@@ -1,30 +1,36 @@
 "use strict";
 let player;
+let mytimer;
 const btn_prev = document.querySelector('#btn_prev');
 const btn_play = document.querySelector('#btn_play');
 const btn_pause = document.querySelector('#btn_pause');
 const btn_next = document.querySelector('#btn_next');
 const btn_stop = document.querySelector('#btn_stop');
+const playerWrapper = document.querySelector('.playerWrapper');
+const thumbWrapper = document.querySelector('.thumbWrapper');
 const progressBarWrapper = document.querySelector('.progressBarWrapper');
 const progressBar = document.querySelector('.progressBar');
 const thumb = document.querySelector('.thumb');
-const arrSongs = ['sEQf5lcnj_o', 'TVJDsACd54I'];
-let arrIndex = 0;
-const playerActions = {
+const playerControl = {
     autoPlay: false,
+    video: false,
+    arrSongs: ['aR-KAldshAE', 'MPVq30bPq6I', 'TVJDsACd54I'],
+    arrIndex: 0,
+    nbSongs: () => playerControl.arrSongs.length,
+    getCurrentSong: () => playerControl.arrSongs[playerControl.arrIndex],
     play: () => {
         player.playVideo();
-        playerActions.showPlay(false);
+        playerControl.showPlay(false);
     },
     pause: () => {
         player.pauseVideo();
-        playerActions.showPlay(true);
+        playerControl.showPlay(true);
     },
     stop: () => {
         player.stopVideo();
-        playerActions.showPlay(true);
+        playerControl.showPlay(true);
         if (progressBarWrapper)
-            progress(0, progressBarWrapper);
+            playerControl.progress(0);
     },
     showPlay: (showPlay) => {
         if (showPlay) {
@@ -37,63 +43,77 @@ const playerActions = {
         }
     },
     prev: () => {
-        arrIndex = (arrIndex + arrSongs.length - 1) % arrSongs.length;
-        playerActions.changeVideo();
+        playerControl.arrIndex = (playerControl.arrIndex + playerControl.nbSongs() - 1) % playerControl.nbSongs();
+        playerControl.changeVideo();
     },
     next: () => {
-        arrIndex = (arrIndex + arrSongs.length + 1) % arrSongs.length;
-        playerActions.changeVideo();
+        playerControl.arrIndex = (playerControl.arrIndex + playerControl.nbSongs() + 1) % playerControl.nbSongs();
+        playerControl.changeVideo();
+    },
+    timer: (e) => {
+        const currentTime = e.offsetX;
+        let playerPercent = progressBarWrapper
+            ? (currentTime / (progressBarWrapper === null || progressBarWrapper === void 0 ? void 0 : progressBarWrapper.getBoundingClientRect().width)) * 100
+            : 0;
+        if (progressBarWrapper)
+            playerControl.progress(playerPercent);
     },
     changeVideo: () => {
-        player.loadVideoById(arrSongs[arrIndex]);
-        playerActions.showPlay(false);
-        if (thumb)
-            thumb.src = `https://img.youtube.com/vi/${arrSongs[arrIndex]}/hqdefault.jpg`;
+        player.loadVideoById(playerControl.getCurrentSong());
+        playerControl.showPlay(false);
+        playerControl.changeThumb();
     },
     changeThumb: () => {
+        if (thumb)
+            thumb.src = `https://img.youtube.com/vi/${playerControl.getCurrentSong()}/hqdefault.jpg`;
+    },
+    progress: (percent) => {
+        if (progressBarWrapper) {
+            const progressBarWidth = (percent * (progressBarWrapper === null || progressBarWrapper === void 0 ? void 0 : progressBarWrapper.getBoundingClientRect().width)) / 100;
+            if (progressBar) {
+                progressBar.style.transitionDuration = progressBarWidth === 0 ? '0s' : '0.1s';
+                progressBar.style.width = progressBarWidth + 'px';
+            }
+        }
+    },
+    setDisplay: () => {
+        if (playerControl.video) {
+            playerWrapper.classList.remove('hidden');
+            thumbWrapper.classList.add('hidden');
+        }
     }
 };
+playerControl.changeThumb();
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-        height: 0,
-        width: 0,
-        videoId: arrSongs[arrIndex],
-        playerVars: {
-            autoplay: 0,
-            controls: 1,
-            showinfo: 0,
-            rel: 0,
-        },
+        videoId: playerControl.getCurrentSong(),
         events: {
             onReady: onPlayerReady,
             onStateChange: onPlayerStateChange,
         },
     });
 }
-function onPlayerReady() {
-    btn_prev === null || btn_prev === void 0 ? void 0 : btn_prev.addEventListener('click', playerActions.prev);
-    btn_play === null || btn_play === void 0 ? void 0 : btn_play.addEventListener('click', playerActions.play);
-    btn_pause === null || btn_pause === void 0 ? void 0 : btn_pause.addEventListener('click', playerActions.pause);
-    btn_stop === null || btn_stop === void 0 ? void 0 : btn_stop.addEventListener('click', playerActions.stop);
-    btn_next === null || btn_next === void 0 ? void 0 : btn_next.addEventListener('click', playerActions.next);
+function onPlayerReady(event) {
+    if (playerControl.autoPlay)
+        event.target.playVideo();
+    btn_prev === null || btn_prev === void 0 ? void 0 : btn_prev.addEventListener('click', playerControl.prev);
+    btn_play === null || btn_play === void 0 ? void 0 : btn_play.addEventListener('click', playerControl.play);
+    btn_pause === null || btn_pause === void 0 ? void 0 : btn_pause.addEventListener('click', playerControl.pause);
+    btn_stop === null || btn_stop === void 0 ? void 0 : btn_stop.addEventListener('click', playerControl.stop);
+    btn_next === null || btn_next === void 0 ? void 0 : btn_next.addEventListener('click', playerControl.next);
+    progressBarWrapper === null || progressBarWrapper === void 0 ? void 0 : progressBarWrapper.addEventListener('click', playerControl.timer);
 }
 function onPlayerStateChange(event) {
-    let mytimer;
     if (event.data === YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
         mytimer = setInterval(function () {
             let playerCurrentTime = player.getCurrentTime();
-            let playerTimeDifference = (playerCurrentTime / playerTotalTime) * 100;
+            let playerPercent = (playerCurrentTime / playerTotalTime) * 100;
             if (progressBarWrapper)
-                progress(playerTimeDifference, progressBarWrapper);
-        }, 1000);
+                playerControl.progress(playerPercent);
+        }, 100);
     }
     else {
         clearTimeout(mytimer);
     }
-}
-function progress(percent, element) {
-    var progressBarWidth = (percent * (element === null || element === void 0 ? void 0 : element.getBoundingClientRect().width)) / 100;
-    if (progressBar)
-        progressBar.style.width = progressBarWidth + 'px';
 }

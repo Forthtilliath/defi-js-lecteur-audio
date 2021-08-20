@@ -1,51 +1,11 @@
-declare const YT: {
-    Player: new (
-        arg0: string,
-        arg1: Options
-    ) => YouTubePlayer,
-    PlayerState: { UNSTARTED: number; PLAYING: number; ENDED: number; PAUSED: number; BUFFERING: number };
-};
-// declare const YT: {
-//     Player: new (
-//         arg0: string,
-//         arg1: Options
-//     ) => IPlayer,
-//     PlayerState: PlayerStates;
-// };
+import PlayerState from './constants/PlayerStates';
+import { EventType } from './eventNames';
 
-
-// interface IPlayer {
-//     [x: string]: any;
-//     setCurrentTime: (arg0: number) => void;
-//     loadVideoById: (arg0: string) => void;
-//     playVideo: () => void;
-//     stopVideo: () => void;
-//     pauseVideo: () => void;
-//     getDuration: () => number;
-//     getCurrentTime: () => number;
-// }
-
-interface IYoutubePlayer {
-    height?: number;
-    width?: number;
-    videoId?: string;
-    playerVars?: {
-        autoplay?: number;
-        controls?: number;
-        showinfo?: number;
-        rel?: number;
-    };
-    events?: {
-        onReady: (event: { target: IPlayer }) => void;
-        onStateChange: (event: { data: number }) => void;
-    };
+export interface EmitterType {
+    trigger: (eventName: string, event: object) => void;
 }
 
-interface IframeApiType {
-    Player: {new(elementId: string, options: Options): YouTubePlayer};
-}
-
-interface Options {
+export interface Options {
     width?: number | string | undefined;
     height?: number | string | undefined;
     videoId?: string | undefined;
@@ -72,16 +32,19 @@ interface Options {
         start?: number | undefined,
         widget_referrer?: string | undefined,
     } | undefined;
-    // events?: {
-    //     [eventType in EventType]?: (event: CustomEvent) => void
-    // } | undefined;
     events?: {
-        onReady: (event: { target: YoutubePlayer }) => void;
-        onStateChange: (event: { data: number }) => void;
-    };
+        [eventType in EventType]?: (event: CustomEvent) => void
+    } | undefined;
 }
 
-interface YouTubePlayer {
+export interface IframeApiType {
+    Player: {new(elementId: string, options: Options): YouTubePlayer};
+}
+
+/**
+ * @see https://developers.google.com/youtube/iframe_api_reference
+ */
+export interface YouTubePlayer {
     addEventListener(event: string, listener: (event: CustomEvent) => void): void;
     destroy(): void;
     getAvailablePlaybackRates(): ReadonlyArray<number>;
@@ -176,14 +139,4 @@ interface YouTubePlayer {
     unMute(): void;
     on(eventType: 'stateChange', listener: (event: CustomEvent & {data: number}) => void): void;
     on(eventType: EventType, listener: (event: CustomEvent) => void): void;
-}
-
-
-declare enum PlayerStates {
-    BUFFERING = 3,
-    ENDED = 0,
-    PAUSED = 2,
-    PLAYING = 1,
-    UNSTARTED = -1,
-    VIDEO_CUED = 5,
 }

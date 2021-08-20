@@ -1,3 +1,9 @@
+$black: #181a1b;
+$red: #cc0000;
+$white: #f2f2f2;
+
+$heightHeader: 60px;
+
 html,
 body {
     width: 100%;
@@ -5,58 +11,92 @@ body {
 }
 
 body {
-    @include center(center);
-    background-image: linear-gradient(36deg, #c05a9c, #223971);
+    background-image: radial-gradient(circle, $red 0%, $black 40%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+header {
+    padding: 10px;
+    height: $heightHeader;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 0 20px 8px $red;
+    background: linear-gradient(180deg, darken($red, 10%) 0%, $red 50%, darken($red, 5%) 100%);
+    @include center;
+
+    img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .logo {
+        font-weight: 600;
+        font-family: 'Peppins', sans-serif;
+        font-size: 30px;
+        color: $white;
+        padding-left: 20px;
+    }
 }
 
 .container {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
-    background-color: black;
-    border-radius: 5px;
-    width: 50%;
-    min-width: 400px;
+    @include center(center);
+    min-height: calc(100vh - #{$heightHeader});
+    height: auto;
 
-    .thumbWrapper {
+    .playerWrapper {
         @include center(center);
-        width: 100%;
-
-        .thumb {
-            width: 100%;
-            max-width: 480px;
-            height: 360px;
-            object-fit: contain;
-            border-radius: 5px 5px 0 0;
-        }
     }
-    .progressBarContainer {
-        background-color: #ddd;
-        width: 100%;
-        padding: 2px;
 
-        .progressBarWrapper {
-            height: 10px;
-            overflow: hidden;
-            @include center();
+    .playerContainer {
+        box-shadow: 0 0 15px 0 $red;
+        background-color: $black;
+        border-radius: 5px;
+        width: 50%;
+        min-width: 400px;
+        margin-top: 50px;
 
-            .progressBar {
-                height: 100%;
-                width: 0;
-                background-color: #cc0000;
-                transition: width 0.3s linear;
+        .thumbWrapper {
+            @include center(center);
+            width: 100%;
+
+            .thumb {
+                width: 100%;
+                max-width: 480px;
+                height: 360px;
+                object-fit: contain;
+                border-radius: 5px 5px 0 0;
             }
         }
-    }
-    .controls {
-      @include center(space-around);
-      padding: 10px;
+        .progressBarContainer {
+            background-color: $white;
+            width: 100%;
+            padding: 2px;
 
-      .controlButton {
-        @include circle(50);
+            .progressBarWrapper {
+                height: 10px;
+                overflow: hidden;
+                @include center();
 
-      }
+                .progressBar {
+                    height: 100%;
+                    width: 0;
+                    background-color: $red;
+                    transition: width 0.1s linear ;
+                }
+            }
+        }
+        .controls {
+            @include center(space-around);
+            padding: 10px;
+
+            .controlButton {
+                @include circle(50);
+            }
+        }
     }
 }
