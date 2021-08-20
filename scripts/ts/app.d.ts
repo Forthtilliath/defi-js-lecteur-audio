@@ -1,29 +1,16 @@
 declare const YT: {
-    Player: new (
-        arg0: string,
-        arg1: Options
-    ) => YouTubePlayer,
-    PlayerState: { UNSTARTED: number; PLAYING: number; ENDED: number; PAUSED: number; BUFFERING: number };
+    Player: new (arg0: string, arg1: Options) => YouTubePlayer;
+    PlayerState: EPlayerStates;
 };
-// declare const YT: {
-//     Player: new (
-//         arg0: string,
-//         arg1: Options
-//     ) => IPlayer,
-//     PlayerState: PlayerStates;
-// };
 
-
-// interface IPlayer {
-//     [x: string]: any;
-//     setCurrentTime: (arg0: number) => void;
-//     loadVideoById: (arg0: string) => void;
-//     playVideo: () => void;
-//     stopVideo: () => void;
-//     pauseVideo: () => void;
-//     getDuration: () => number;
-//     getCurrentTime: () => number;
-// }
+interface EPlayerStates {
+    BUFFERING: number = 3;
+    ENDED: number = 0;
+    PAUSED: number = 2;
+    PLAYING: number = 1;
+    UNSTARTED: number = -1;
+    VIDEO_CUED: number = 5;
+}
 
 interface IYoutubePlayer {
     height?: number;
@@ -42,39 +29,38 @@ interface IYoutubePlayer {
 }
 
 interface IframeApiType {
-    Player: {new(elementId: string, options: Options): YouTubePlayer};
+    Player: { new (elementId: string, options: Options): YouTubePlayer };
 }
 
 interface Options {
     width?: number | string | undefined;
     height?: number | string | undefined;
     videoId?: string | undefined;
-    playerVars?: {
-        autoplay?: 0 | 1 | undefined,
-        cc_lang_pref?: string | undefined,
-        cc_load_policy?: 1 | undefined,
-        color?: 'red' | 'white' | undefined,
-        controls?: 0 | 1 | undefined,
-        disablekb?: 0 | 1 | undefined,
-        enablejsapi?: 0 | 1 | undefined,
-        end?: number | undefined,
-        fs?: 0 | 1 | undefined,
-        hl?: string | undefined,
-        iv_load_policy?: 1 | 3 | undefined,
-        list?: string | undefined,
-        listType?: 'playlist' | 'search' | 'user_uploads' | undefined,
-        loop?: 0 | 1 | undefined,
-        modestbranding?: 1 | undefined,
-        origin?: string | undefined,
-        playlist?: string | undefined,
-        playsinline?: 0 | 1 | undefined,
-        rel?: 0 | 1 | undefined,
-        start?: number | undefined,
-        widget_referrer?: string | undefined,
-    } | undefined;
-    // events?: {
-    //     [eventType in EventType]?: (event: CustomEvent) => void
-    // } | undefined;
+    playerVars?:
+        | {
+              autoplay?: 0 | 1 | undefined;
+              cc_lang_pref?: string | undefined;
+              cc_load_policy?: 1 | undefined;
+              color?: 'red' | 'white' | undefined;
+              controls?: 0 | 1 | undefined;
+              disablekb?: 0 | 1 | undefined;
+              enablejsapi?: 0 | 1 | undefined;
+              end?: number | undefined;
+              fs?: 0 | 1 | undefined;
+              hl?: string | undefined;
+              iv_load_policy?: 1 | 3 | undefined;
+              list?: string | undefined;
+              listType?: 'playlist' | 'search' | 'user_uploads' | undefined;
+              loop?: 0 | 1 | undefined;
+              modestbranding?: 1 | undefined;
+              origin?: string | undefined;
+              playlist?: string | undefined;
+              playsinline?: 0 | 1 | undefined;
+              rel?: 0 | 1 | undefined;
+              start?: number | undefined;
+              widget_referrer?: string | undefined;
+          }
+        | undefined;
     events?: {
         onReady: (event: { target: YoutubePlayer }) => void;
         onStateChange: (event: { data: number }) => void;
@@ -101,11 +87,11 @@ interface YouTubePlayer {
         suggestedQuality?: string,
     ): void;
     cuePlaylist(playlist: {
-        listType: string,
-        list?: string | undefined,
-        index?: number | undefined,
-        startSeconds?: number | undefined,
-        suggestedQuality?: string | undefined,
+        listType: string;
+        list?: string | undefined;
+        index?: number | undefined;
+        startSeconds?: number | undefined;
+        suggestedQuality?: string | undefined;
     }): void;
     loadPlaylist(
         playlist: string | ReadonlyArray<string>,
@@ -114,11 +100,11 @@ interface YouTubePlayer {
         suggestedQuality?: string,
     ): void;
     loadPlaylist(playlist: {
-        listType: string,
-        list?: string | undefined,
-        index?: number | undefined,
-        startSeconds?: number | undefined,
-        suggestedQuality?: string | undefined,
+        listType: string;
+        list?: string | undefined;
+        index?: number | undefined;
+        startSeconds?: number | undefined;
+        suggestedQuality?: string | undefined;
     }): void;
     getPlaylist(): ReadonlyArray<string>;
     getPlaylistIndex(): number;
@@ -131,31 +117,31 @@ interface YouTubePlayer {
     getVolume(): number;
     cueVideoById(videoId: string, startSeconds?: number, suggestedQuality?: string): void;
     cueVideoById(video: {
-        videoId: string,
-        startSeconds?: number | undefined,
-        endSeconds?: number | undefined,
-        suggestedQuality?: string | undefined,
+        videoId: string;
+        startSeconds?: number | undefined;
+        endSeconds?: number | undefined;
+        suggestedQuality?: string | undefined;
     }): void;
     cueVideoByUrl(mediaContentUrl: string, startSeconds?: number, suggestedQuality?: string): void;
     cueVideoByUrl(video: {
-        mediaContentUrl: string,
-        startSeconds?: number | undefined,
-        endSeconds?: number | undefined,
-        suggestedQuality?: string | undefined,
+        mediaContentUrl: string;
+        startSeconds?: number | undefined;
+        endSeconds?: number | undefined;
+        suggestedQuality?: string | undefined;
     }): void;
     loadVideoByUrl(mediaContentUrl: string, startSeconds?: number, suggestedQuality?: string): void;
     loadVideoByUrl(video: {
-        mediaContentUrl: string,
-        startSeconds?: number | undefined,
-        endSeconds?: number | undefined,
-        suggestedQuality?: string | undefined,
+        mediaContentUrl: string;
+        startSeconds?: number | undefined;
+        endSeconds?: number | undefined;
+        suggestedQuality?: string | undefined;
     }): void;
     loadVideoById(videoId: string, startSeconds?: number, suggestedQuality?: string): void;
     loadVideoById(video: {
-        videoId: string,
-        startSeconds?: number | undefined,
-        endSeconds?: number | undefined,
-        suggestedQuality?: string | undefined,
+        videoId: string;
+        startSeconds?: number | undefined;
+        endSeconds?: number | undefined;
+        suggestedQuality?: string | undefined;
     }): void;
     isMuted(): boolean;
     mute(): void;
@@ -174,16 +160,6 @@ interface YouTubePlayer {
     setVolume(volume: number): void;
     stopVideo(): void;
     unMute(): void;
-    on(eventType: 'stateChange', listener: (event: CustomEvent & {data: number}) => void): void;
+    on(eventType: 'stateChange', listener: (event: CustomEvent & { data: number }) => void): void;
     on(eventType: EventType, listener: (event: CustomEvent) => void): void;
-}
-
-
-declare enum PlayerStates {
-    BUFFERING = 3,
-    ENDED = 0,
-    PAUSED = 2,
-    PLAYING = 1,
-    UNSTARTED = -1,
-    VIDEO_CUED = 5,
 }

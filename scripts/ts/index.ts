@@ -95,7 +95,7 @@ const playerControl = {
 
 playerControl.changeThumb();
 
-/**Fonction de l'API Youtube, lancée automatiquement une fois l'API chargée */
+/** Fonction de l'API Youtube, lancée automatiquement une fois l'API chargée */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         videoId: playerControl.getCurrentSong(),
@@ -106,7 +106,7 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-/** Est lancé une fois l'API prête à lancer la vidéo/musique */
+/** Est lancée une fois l'API prête à lancer la vidéo/musique */
 function onPlayerReady(event: { target: YouTubePlayer }) {
     if (playerControl.autoPlay) event.target.playVideo();
     btn_prev?.addEventListener('click', playerControl.prev);
@@ -117,6 +117,7 @@ function onPlayerReady(event: { target: YouTubePlayer }) {
     progressBarWrapper?.addEventListener('click', playerControl.timer);
 }
 
+/** Est lancée à chaque changement d'état */
 function onPlayerStateChange(event: { data: number }) {
     if (event.data === YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
@@ -127,5 +128,8 @@ function onPlayerStateChange(event: { data: number }) {
         }, 100);
     } else {
         clearTimeout(mytimer);
+        if (event.data === YT.PlayerState.ENDED) {
+            
+        }
     }
 }

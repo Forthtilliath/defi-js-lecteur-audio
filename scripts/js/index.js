@@ -115,5 +115,7 @@ function onPlayerStateChange(event) {
     }
     else {
         clearTimeout(mytimer);
+        if (event.data === YT.PlayerState.ENDED) {
+        }
     }
 }
