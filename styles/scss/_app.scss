@@ -5,7 +5,8 @@ body {
 }
 
 body {
-    background-image: radial-gradient(circle, $red 0%, $black 40%);
+    // background-image: radial-gradient(circle, $red 0%, $black 40%);
+    background-color: $black;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
@@ -66,7 +67,7 @@ header {
     .playerContainer {
         box-shadow: 0 0 15px 0 $red;
         background-color: $black;
-        border-radius: 5px;
+        border-radius: 40px;
         width: 50%;
         min-width: 400px;
         margin-top: 50px;

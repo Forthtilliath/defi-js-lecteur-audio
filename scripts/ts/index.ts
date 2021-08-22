@@ -153,9 +153,9 @@ const playerControl = {
     },
 
     setBackground: () => {
-        let rand = ~~(Math.random() * 20 + 30);
+        // let rand = ~~(Math.random() * 20 + 30);
         // document.body.style.backgroundImage = `radial-gradient(circle, #c00 0%, #181a1b ${rand}%)`;
-        let rand1 = ~~(Math.random() * 0 + 50);
+        let rand1 = ~~(Math.random() * 10 + 40);
         let rand2 = ~~(Math.random() * 10 - 10);
         (document.querySelector('.playerContainer') as HTMLDivElement).style.boxShadow = `0 0 ${rand1}px ${rand2}px #cc0000`;
     },

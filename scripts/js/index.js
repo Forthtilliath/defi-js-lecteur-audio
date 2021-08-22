@@ -108,8 +108,7 @@ const playerControl = {
         }
     },
     setBackground: () => {
-        let rand = ~~(Math.random() * 20 + 30);
-        let rand1 = ~~(Math.random() * 0 + 50);
+        let rand1 = ~~(Math.random() * 10 + 40);
         let rand2 = ~~(Math.random() * 10 - 10);
         document.querySelector('.playerContainer').style.boxShadow = `0 0 ${rand1}px ${rand2}px #cc0000`;
     },
