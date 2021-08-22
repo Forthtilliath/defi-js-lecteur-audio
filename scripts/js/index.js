@@ -60,7 +60,7 @@ const playerControl = {
     },
     setButtonShuffle: () => btn_random.classList.toggle('active'),
     shuffleIndex: () => {
-        return [...[...playerControl.playlist].keys()]
+        return [...playerControl.playlist.keys()]
             .filter((i) => i !== playerControl.playlistIndex)
             .sort(() => Math.random() - 0.5)
             .pop();

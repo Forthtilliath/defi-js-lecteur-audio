@@ -84,7 +84,7 @@ const playerControl = {
         // On retire l'indice de la musique en cours
         // On mélange le tout
         // Et on tire le premier numéro :)
-        return [...[...playerControl.playlist].keys()]
+        return [...playerControl.playlist.keys()]
             .filter((i) => i !== playerControl.playlistIndex)
             .sort(() => Math.random() - 0.5)
             .pop() as number;
