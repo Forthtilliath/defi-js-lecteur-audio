@@ -10,6 +10,7 @@ const btn_next: HTMLButtonElement = $('#btn_next') as HTMLButtonElement;
 const btn_stop: HTMLButtonElement = $('#btn_stop') as HTMLButtonElement;
 const btn_random: HTMLButtonElement = $('#btn_random') as HTMLButtonElement;
 const playerWrapper: HTMLDivElement = $('.playerWrapper') as HTMLDivElement;
+const titleWrapper: HTMLDivElement = $('.titleWrapper > .title') as HTMLDivElement;
 const thumbWrapper: HTMLDivElement = $('.thumbWrapper') as HTMLDivElement;
 const progressBarWrapper: HTMLDivElement = $('.progressBarWrapper') as HTMLDivElement;
 const progressBar: HTMLDivElement = $('.progressBar') as HTMLDivElement;
@@ -21,7 +22,7 @@ const playerControl = {
     /** Affiche vidéo ou image */
     video: false,
     /** Playlist */
-    playlist: ['aR-KAldshAE', 'MPVq30bPq6I', 'jrf0r3ajpmA','nEwzFF4HeB8'],
+    playlist: ['aR-KAldshAE', 'MPVq30bPq6I', 'jrf0r3ajpmA', 'nEwzFF4HeB8'],
     playlistIndex: 0,
     /** Etat de la vidéo */
     state: -1,
@@ -83,7 +84,10 @@ const playerControl = {
         // On retire l'indice de la musique en cours
         // On mélange le tout
         // Et on tire le premier numéro :)
-        return [...[...playerControl.playlist].keys()].filter(i => i !== playerControl.playlistIndex).sort(() => Math.random() - 0.5).pop() as number;
+        return [...[...playerControl.playlist].keys()]
+            .filter((i) => i !== playerControl.playlistIndex)
+            .sort(() => Math.random() - 0.5)
+            .pop() as number;
     },
     nextIndex: () => (playerControl.playlistIndex + playerControl.nbSongs() - 1) % playerControl.nbSongs(),
     prevIndex: () => (playerControl.playlistIndex + playerControl.nbSongs() + 1) % playerControl.nbSongs(),
@@ -114,6 +118,7 @@ const playerControl = {
         player.loadVideoById(playerControl.getCurrentSong());
         playerControl.showPlay(false);
         playerControl.changeThumb();
+        playerControl.changeTitle();
     },
 
     /** Modifie l'image affichée */
@@ -121,6 +126,14 @@ const playerControl = {
         if (thumb) {
             thumb.src = `https://i.ytimg.com/vi_webp/${playerControl.getCurrentSong()}/hqdefault.webp`;
         }
+    },
+
+    /** Change le titre de la vidéo */
+    changeTitle: () => {
+        // https://newbedev.com/youtube-video-title-with-api-v3-without-api-key
+        fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${playerControl.getCurrentSong()}`)
+            .then((data) => data.json())
+            .then((data: YoutubeVideoInfos) => (titleWrapper.innerText = data.title));
     },
 
     /** Met à jour la barre de progression de la vidéo */
@@ -154,6 +167,7 @@ function onYouTubeIframeAPIReady() {
 /** Est lancée une fois l'API prête à lancer la vidéo/musique */
 function onPlayerReady(event: { target: YouTubePlayer }) {
     playerControl.changeThumb();
+    playerControl.changeTitle();
 
     if (playerControl.autoPlay) event.target.playVideo();
     if (playerControl.shuffle) playerControl.setButtonShuffle();

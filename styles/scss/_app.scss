@@ -42,6 +42,22 @@ header {
     min-height: calc(100vh - #{$heightHeader} - #{$heightFooter});
     height: auto;
 
+    .titleWrapper {
+        @include center(center);
+        color: $white;
+        background-color: black;
+        padding: 20px;
+        font-size: 1.5rem;
+        width: 100%;
+        border-radius: 5px 5px 0 0;
+
+        .title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
     .playerWrapper {
         @include center(center);
     }
@@ -64,7 +80,6 @@ header {
                 max-width: 480px;
                 height: 360px;
                 object-fit: contain;
-                border-radius: 5px 5px 0 0;
             }
         }
         .progressBarContainer {

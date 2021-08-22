@@ -9,6 +9,7 @@ const btn_next = $('#btn_next');
 const btn_stop = $('#btn_stop');
 const btn_random = $('#btn_random');
 const playerWrapper = $('.playerWrapper');
+const titleWrapper = $('.titleWrapper > .title');
 const thumbWrapper = $('.thumbWrapper');
 const progressBarWrapper = $('.progressBarWrapper');
 const progressBar = $('.progressBar');
@@ -59,7 +60,10 @@ const playerControl = {
     },
     setButtonShuffle: () => btn_random.classList.toggle('active'),
     shuffleIndex: () => {
-        return [...[...playerControl.playlist].keys()].filter(i => i !== playerControl.playlistIndex).sort(() => Math.random() - 0.5).pop();
+        return [...[...playerControl.playlist].keys()]
+            .filter((i) => i !== playerControl.playlistIndex)
+            .sort(() => Math.random() - 0.5)
+            .pop();
     },
     nextIndex: () => (playerControl.playlistIndex + playerControl.nbSongs() - 1) % playerControl.nbSongs(),
     prevIndex: () => (playerControl.playlistIndex + playerControl.nbSongs() + 1) % playerControl.nbSongs(),
@@ -80,11 +84,17 @@ const playerControl = {
         player.loadVideoById(playerControl.getCurrentSong());
         playerControl.showPlay(false);
         playerControl.changeThumb();
+        playerControl.changeTitle();
     },
     changeThumb: () => {
         if (thumb) {
             thumb.src = `https://i.ytimg.com/vi_webp/${playerControl.getCurrentSong()}/hqdefault.webp`;
         }
+    },
+    changeTitle: () => {
+        fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${playerControl.getCurrentSong()}`)
+            .then((data) => data.json())
+            .then((data) => (titleWrapper.innerText = data.title));
     },
     progress: (percent) => {
         const progressBarWidth = (percent * (progressBarWrapper === null || progressBarWrapper === void 0 ? void 0 : progressBarWrapper.getBoundingClientRect().width)) / 100;
@@ -109,6 +119,7 @@ function onYouTubeIframeAPIReady() {
 }
 function onPlayerReady(event) {
     playerControl.changeThumb();
+    playerControl.changeTitle();
     if (playerControl.autoPlay)
         event.target.playVideo();
     if (playerControl.shuffle)

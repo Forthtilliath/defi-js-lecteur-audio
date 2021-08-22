@@ -143,3 +143,7 @@ interface YouTubePlayer {
     on(eventType: 'stateChange', listener: (event: CustomEvent & { data: number }) => void): void;
     on(eventType: EventType, listener: (event: CustomEvent) => void): void;
 }
+
+interface YoutubeVideoInfos {
+    title: string,
+}

@@ -54,6 +54,22 @@ header .logo {
   min-height: calc(100vh - 60px - 50px);
   height: auto;
 }
+.container .titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f2f2f2;
+  background-color: black;
+  padding: 20px;
+  font-size: 1.5rem;
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+}
+.container .titleWrapper .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .container .playerWrapper {
   display: flex;
   align-items: center;
@@ -79,7 +95,6 @@ header .logo {
   max-width: 480px;
   height: 360px;
   object-fit: contain;
-  border-radius: 5px 5px 0 0;
 }
 .container .playerContainer .progressBarContainer {
   background-color: #f2f2f2;
