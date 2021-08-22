@@ -93,6 +93,10 @@ header {
             .controlButton {
                 @include circle(50);
                 cursor: pointer;
+
+                &.active {
+                    background-color: $red;
+                }
             }
         }
     }

@@ -113,6 +113,9 @@ header .logo {
   object-fit: cover;
   cursor: pointer;
 }
+.container .playerContainer .controls .controlButton.active {
+  background-color: #cc0000;
+}
 
 footer {
   display: flex;

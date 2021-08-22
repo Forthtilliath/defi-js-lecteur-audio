@@ -8,6 +8,7 @@ const btn_play: HTMLButtonElement = $('#btn_play') as HTMLButtonElement;
 const btn_pause: HTMLButtonElement = $('#btn_pause') as HTMLButtonElement;
 const btn_next: HTMLButtonElement = $('#btn_next') as HTMLButtonElement;
 const btn_stop: HTMLButtonElement = $('#btn_stop') as HTMLButtonElement;
+const btn_random: HTMLButtonElement = $('#btn_random') as HTMLButtonElement;
 const playerWrapper: HTMLDivElement = $('.playerWrapper') as HTMLDivElement;
 const thumbWrapper: HTMLDivElement = $('.thumbWrapper') as HTMLDivElement;
 const progressBarWrapper: HTMLDivElement = $('.progressBarWrapper') as HTMLDivElement;
@@ -20,10 +21,11 @@ const playerControl = {
     /** Affiche vidéo ou image */
     video: false,
     /** Playlist */
-    playlist: ['aR-KAldshAE', 'MPVq30bPq6I', 'jrf0r3ajpmA'],
+    playlist: ['aR-KAldshAE', 'MPVq30bPq6I', 'jrf0r3ajpmA','nEwzFF4HeB8'],
     playlistIndex: 0,
     /** Etat de la vidéo */
     state: -1,
+    shuffle: false,
 
     /** Nombre de sons dans la playlist */
     nbSongs: () => playerControl.playlist.length,
@@ -32,7 +34,7 @@ const playerControl = {
     getCurrentSong: () => playerControl.playlist[playerControl.playlistIndex],
 
     /** Met en lecture la video */
-    play: (): void => {
+    play: () => {
         player.playVideo();
         playerControl.showPlay(false);
     },
@@ -59,16 +61,32 @@ const playerControl = {
     },
     /** Met la vidéo précédente */
     prev: () => {
-        playerControl.playlistIndex =
-            (playerControl.playlistIndex + playerControl.nbSongs() - 1) % playerControl.nbSongs();
+        playerControl.playlistIndex = playerControl.shuffle ? playerControl.shuffleIndex() : playerControl.prevIndex();
         playerControl.changeVideo();
     },
     /** Met la vidéo suivante */
     next: () => {
-        playerControl.playlistIndex =
-            (playerControl.playlistIndex + playerControl.nbSongs() + 1) % playerControl.nbSongs();
+        playerControl.playlistIndex = playerControl.shuffle ? playerControl.shuffleIndex() : playerControl.prevIndex();
         playerControl.changeVideo();
     },
+    /** Active/Désactive le mode random */
+    setShuffle: () => {
+        playerControl.shuffle = !playerControl.shuffle;
+        playerControl.setButtonShuffle();
+    },
+    setButtonShuffle: () => btn_random.classList.toggle('active'),
+    // shuffleIndex: () => Math.floor(Math.random() * playerControl.nbSongs()),
+    // Comme peu de choix de musique, le risque de retomber sur la meme est grande, donc
+    // on fait ca autrement
+    shuffleIndex: () => {
+        // Pour résumer, on récupère la playlist qu'on convertit en key pour n'avoir que les indices
+        // On retire l'indice de la musique en cours
+        // On mélange le tout
+        // Et on tire le premier numéro :)
+        return [...[...playerControl.playlist].keys()].filter(i => i !== playerControl.playlistIndex).sort(() => Math.random() - 0.5).pop() as number;
+    },
+    nextIndex: () => (playerControl.playlistIndex + playerControl.nbSongs() - 1) % playerControl.nbSongs(),
+    prevIndex: () => (playerControl.playlistIndex + playerControl.nbSongs() + 1) % playerControl.nbSongs(),
 
     /** Event si l'utilisateur clic sur la barre de progression */
     timer: (e: MouseEvent) => {
@@ -138,6 +156,7 @@ function onPlayerReady(event: { target: YouTubePlayer }) {
     playerControl.changeThumb();
 
     if (playerControl.autoPlay) event.target.playVideo();
+    if (playerControl.shuffle) playerControl.setButtonShuffle();
 
     // Events
     btn_prev?.addEventListener('click', playerControl.prev);
@@ -145,13 +164,14 @@ function onPlayerReady(event: { target: YouTubePlayer }) {
     btn_pause?.addEventListener('click', playerControl.pause);
     btn_stop?.addEventListener('click', playerControl.stop);
     btn_next?.addEventListener('click', playerControl.next);
+    btn_random?.addEventListener('click', playerControl.setShuffle);
     progressBarWrapper?.addEventListener('click', playerControl.timer);
 }
 
 /** Est lancée à chaque changement d'état */
 function onPlayerStateChange(event: { data: number }) {
     playerControl.state = event.data;
-    console.log('state', playerControl.state); 
+    console.log('state', playerControl.state);
 
     if (playerControl.state === YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
