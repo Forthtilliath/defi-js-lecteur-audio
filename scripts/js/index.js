@@ -107,6 +107,10 @@ const playerControl = {
             thumbWrapper.classList.add('hidden');
         }
     },
+    setBackground: () => {
+        let rand = ~~(Math.random() * 20 + 30);
+        document.body.style.backgroundImage = `radial-gradient(circle, #c00 0%, #181a1b ${rand}%)`;
+    }
 };
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -141,6 +145,7 @@ function onPlayerStateChange(event) {
             let playerCurrentTime = player.getCurrentTime();
             let playerPercent = (playerCurrentTime / playerTotalTime) * 100;
             playerControl.progress(playerPercent);
+            playerControl.setBackground();
         }, 100);
     }
     else {
