@@ -154,8 +154,11 @@ const playerControl = {
 
     setBackground: () => {
         let rand = ~~(Math.random() * 20 + 30);
-        document.body.style.backgroundImage = `radial-gradient(circle, #c00 0%, #181a1b ${rand}%)`;
-    }
+        // document.body.style.backgroundImage = `radial-gradient(circle, #c00 0%, #181a1b ${rand}%)`;
+        let rand1 = ~~(Math.random() * 0 + 50);
+        let rand2 = ~~(Math.random() * 10 - 10);
+        (document.querySelector('.playerContainer') as HTMLDivElement).style.boxShadow = `0 0 ${rand1}px ${rand2}px #cc0000`;
+    },
 };
 
 /** Fonction de l'API Youtube, lancée automatiquement une fois l'API chargée */
@@ -178,13 +181,13 @@ function onPlayerReady(event: { target: YouTubePlayer }) {
     if (playerControl.shuffle) playerControl.setButtonShuffle();
 
     // Events
-    btn_prev?.addEventListener('click', playerControl.prev);
-    btn_play?.addEventListener('click', playerControl.play);
-    btn_pause?.addEventListener('click', playerControl.pause);
-    btn_stop?.addEventListener('click', playerControl.stop);
-    btn_next?.addEventListener('click', playerControl.next);
-    btn_random?.addEventListener('click', playerControl.setShuffle);
-    progressBarWrapper?.addEventListener('click', playerControl.timer);
+    btn_prev.addEventListener('click', playerControl.prev);
+    btn_play.addEventListener('click', playerControl.play);
+    btn_pause.addEventListener('click', playerControl.pause);
+    btn_stop.addEventListener('click', playerControl.stop);
+    btn_next.addEventListener('click', playerControl.next);
+    btn_random.addEventListener('click', playerControl.setShuffle);
+    progressBarWrapper.addEventListener('click', playerControl.timer);
 }
 
 /** Est lancée à chaque changement d'état */

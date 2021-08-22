@@ -109,8 +109,10 @@ const playerControl = {
     },
     setBackground: () => {
         let rand = ~~(Math.random() * 20 + 30);
-        document.body.style.backgroundImage = `radial-gradient(circle, #c00 0%, #181a1b ${rand}%)`;
-    }
+        let rand1 = ~~(Math.random() * 0 + 50);
+        let rand2 = ~~(Math.random() * 10 - 10);
+        document.querySelector('.playerContainer').style.boxShadow = `0 0 ${rand1}px ${rand2}px #cc0000`;
+    },
 };
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -128,13 +130,13 @@ function onPlayerReady(event) {
         event.target.playVideo();
     if (playerControl.shuffle)
         playerControl.setButtonShuffle();
-    btn_prev === null || btn_prev === void 0 ? void 0 : btn_prev.addEventListener('click', playerControl.prev);
-    btn_play === null || btn_play === void 0 ? void 0 : btn_play.addEventListener('click', playerControl.play);
-    btn_pause === null || btn_pause === void 0 ? void 0 : btn_pause.addEventListener('click', playerControl.pause);
-    btn_stop === null || btn_stop === void 0 ? void 0 : btn_stop.addEventListener('click', playerControl.stop);
-    btn_next === null || btn_next === void 0 ? void 0 : btn_next.addEventListener('click', playerControl.next);
-    btn_random === null || btn_random === void 0 ? void 0 : btn_random.addEventListener('click', playerControl.setShuffle);
-    progressBarWrapper === null || progressBarWrapper === void 0 ? void 0 : progressBarWrapper.addEventListener('click', playerControl.timer);
+    btn_prev.addEventListener('click', playerControl.prev);
+    btn_play.addEventListener('click', playerControl.play);
+    btn_pause.addEventListener('click', playerControl.pause);
+    btn_stop.addEventListener('click', playerControl.stop);
+    btn_next.addEventListener('click', playerControl.next);
+    btn_random.addEventListener('click', playerControl.setShuffle);
+    progressBarWrapper.addEventListener('click', playerControl.timer);
 }
 function onPlayerStateChange(event) {
     playerControl.state = event.data;
