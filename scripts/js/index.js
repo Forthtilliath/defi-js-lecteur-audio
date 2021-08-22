@@ -110,6 +110,7 @@ function onPlayerReady(event) {
 }
 function onPlayerStateChange(event) {
     playerControl.state = event.data;
+    
     if (playerControl.state === YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
         mytimer = setInterval(function () {
@@ -121,6 +122,7 @@ function onPlayerStateChange(event) {
     else {
         clearTimeout(mytimer);
         if (playerControl.state === YT.PlayerState.ENDED) {
+            playerControl.next();
         }
     }
 }

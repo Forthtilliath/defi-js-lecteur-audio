@@ -151,6 +151,8 @@ function onPlayerReady(event: { target: YouTubePlayer }) {
 /** Est lancée à chaque changement d'état */
 function onPlayerStateChange(event: { data: number }) {
     playerControl.state = event.data;
+    console.log('state', playerControl.state); 
+
     if (playerControl.state === YT.PlayerState.PLAYING) {
         let playerTotalTime = player.getDuration();
         mytimer = setInterval(function () {
@@ -161,6 +163,7 @@ function onPlayerStateChange(event: { data: number }) {
     } else {
         clearTimeout(mytimer);
         if (playerControl.state === YT.PlayerState.ENDED) {
+            playerControl.next();
         }
     }
 }
