@@ -123,6 +123,7 @@ function onYouTubeIframeAPIReady() {
     });
 }
 function onPlayerReady(event) {
+    thumb.style.width = "100%";
     playerControl.changeThumb();
     playerControl.changeTitle();
     if (playerControl.autoPlay)

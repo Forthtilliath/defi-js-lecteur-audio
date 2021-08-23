@@ -43,27 +43,6 @@ header {
     min-height: calc(100vh - #{$heightHeader} - #{$heightFooter});
     height: auto;
 
-    .titleWrapper {
-        @include center(center);
-        color: $white;
-        background-color: black;
-        padding: 20px;
-        font-size: 1.5rem;
-        width: 100%;
-        height: 70px;
-        border-radius: 40px 40px 0 0;
-
-        .title {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-    }
-
-    .playerWrapper {
-        @include center(center);
-    }
-
     .playerContainer {
         box-shadow: 0 0 15px 0 $red;
         background-color: $black;
@@ -71,16 +50,43 @@ header {
         width: 50%;
         min-width: 400px;
         margin-top: 50px;
+        position: relative;
+
+        .titleWrapper {
+            @include center(center);
+            color: $white;
+            background-color: #0006;
+            padding: 20px;
+            font-size: 1.5rem;
+            width: 100%;
+            height: 70px;
+            border-radius: 40px 40px 0 0;
+            position: absolute;
+            z-index: 1;
+
+            .title {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .playerWrapper {
+            @include center(center);
+        }
 
         .thumbWrapper {
             @include center(center);
             width: 100%;
+            overflow: hidden;
+            height: 500px;
+            border-radius: 40px 40px 0 0;
             background-color: black;
 
             .thumb {
-                width: 100%;
-                max-width: 480px;
-                height: 360px;
+                // width: 100%;
+                // max-width: 480px;
+                // height: 360px;
                 object-fit: contain;
             }
         }

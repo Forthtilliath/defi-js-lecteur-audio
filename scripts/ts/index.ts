@@ -174,6 +174,7 @@ function onYouTubeIframeAPIReady() {
 
 /** Est lancée une fois l'API prête à lancer la vidéo/musique */
 function onPlayerReady(event: { target: YouTubePlayer }) {
+    thumb.style.width = "100%";
     playerControl.changeThumb();
     playerControl.changeTitle();
 
