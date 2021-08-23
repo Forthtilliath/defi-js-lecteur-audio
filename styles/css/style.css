@@ -97,9 +97,6 @@ header .logo {
   border-radius: 40px 40px 0 0;
   background-color: black;
 }
-.container .playerContainer .thumbWrapper .thumb {
-  object-fit: contain;
-}
 .container .playerContainer .progressBarContainer {
   background-color: #f2f2f2;
   width: 100%;

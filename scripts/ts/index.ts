@@ -124,7 +124,7 @@ const playerControl = {
     /** Modifie l'image affichée */
     changeThumb: () => {
         if (thumb) {
-            thumb.src = `https://i.ytimg.com/vi_webp/${playerControl.getCurrentSong()}/hqdefault.webp`;
+            thumb.src = `https://i.ytimg.com/vi_webp/${playerControl.getCurrentSong()}/maxresdefault.webp`;
         }
     },
 
