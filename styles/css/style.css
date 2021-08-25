@@ -92,10 +92,15 @@ header .logo {
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 30vw;
+  min-height: 250px;
   overflow: hidden;
-  height: 500px;
   border-radius: 40px 40px 0 0;
   background-color: black;
+}
+.container .playerContainer .thumbWrapper .thumb {
+  object-fit: cover;
+  height: 100%;
 }
 .container .playerContainer .progressBarContainer {
   background-color: #f2f2f2;
