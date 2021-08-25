@@ -8,6 +8,7 @@ const btn_pause = $('#btn_pause');
 const btn_next = $('#btn_next');
 const btn_stop = $('#btn_stop');
 const btn_random = $('#btn_random');
+const btn_repeat = $('#btn_repeat');
 const playerWrapper = $('.playerWrapper');
 const titleWrapper = $('.titleWrapper > .title');
 const thumbWrapper = $('.thumbWrapper');
@@ -21,6 +22,7 @@ const playerControl = {
     playlistIndex: 0,
     state: -1,
     shuffle: false,
+    repeatOne: false,
     nbSongs: () => playerControl.playlist.length,
     getCurrentSong: () => playerControl.playlist[playerControl.playlistIndex],
     play: () => {
@@ -54,6 +56,11 @@ const playerControl = {
         playerControl.playlistIndex = playerControl.shuffle ? playerControl.shuffleIndex() : playerControl.prevIndex();
         playerControl.changeVideo();
     },
+    setRepeat: () => {
+        playerControl.repeatOne = !playerControl.repeatOne;
+        playerControl.setButtonRepeat();
+    },
+    setButtonRepeat: () => btn_repeat.classList.toggle('active'),
     setShuffle: () => {
         playerControl.shuffle = !playerControl.shuffle;
         playerControl.setButtonShuffle();
@@ -136,6 +143,7 @@ function onPlayerReady(event) {
     btn_stop.addEventListener('click', playerControl.stop);
     btn_next.addEventListener('click', playerControl.next);
     btn_random.addEventListener('click', playerControl.setShuffle);
+    btn_repeat.addEventListener('click', playerControl.setRepeat);
     progressBarWrapper.addEventListener('click', playerControl.timer);
 }
 function onPlayerStateChange(event) {
@@ -153,7 +161,10 @@ function onPlayerStateChange(event) {
     else {
         clearTimeout(mytimer);
         if (playerControl.state === YT.PlayerState.ENDED) {
-            playerControl.next();
+            if (playerControl.repeatOne)
+                playerControl.changeVideo();
+            else
+                playerControl.next();
         }
     }
 }

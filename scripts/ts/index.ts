@@ -9,6 +9,7 @@ const btn_pause: HTMLButtonElement = $('#btn_pause') as HTMLButtonElement;
 const btn_next: HTMLButtonElement = $('#btn_next') as HTMLButtonElement;
 const btn_stop: HTMLButtonElement = $('#btn_stop') as HTMLButtonElement;
 const btn_random: HTMLButtonElement = $('#btn_random') as HTMLButtonElement;
+const btn_repeat: HTMLButtonElement = $('#btn_repeat') as HTMLButtonElement;
 const playerWrapper: HTMLDivElement = $('.playerWrapper') as HTMLDivElement;
 const titleWrapper: HTMLDivElement = $('.titleWrapper > .title') as HTMLDivElement;
 const thumbWrapper: HTMLDivElement = $('.thumbWrapper') as HTMLDivElement;
@@ -27,6 +28,7 @@ const playerControl = {
     /** Etat de la vidéo */
     state: -1,
     shuffle: false,
+    repeatOne: false,
 
     /** Nombre de sons dans la playlist */
     nbSongs: () => playerControl.playlist.length,
@@ -70,6 +72,11 @@ const playerControl = {
         playerControl.playlistIndex = playerControl.shuffle ? playerControl.shuffleIndex() : playerControl.prevIndex();
         playerControl.changeVideo();
     },
+    setRepeat: () => {
+        playerControl.repeatOne = !playerControl.repeatOne;
+        playerControl.setButtonRepeat();
+    },
+    setButtonRepeat: () => btn_repeat.classList.toggle('active'),
     /** Active/Désactive le mode random */
     setShuffle: () => {
         playerControl.shuffle = !playerControl.shuffle;
@@ -188,6 +195,7 @@ function onPlayerReady(event: { target: YouTubePlayer }) {
     btn_stop.addEventListener('click', playerControl.stop);
     btn_next.addEventListener('click', playerControl.next);
     btn_random.addEventListener('click', playerControl.setShuffle);
+    btn_repeat.addEventListener('click', playerControl.setRepeat);
     progressBarWrapper.addEventListener('click', playerControl.timer);
 }
 
@@ -207,7 +215,8 @@ function onPlayerStateChange(event: { data: number }) {
     } else {
         clearTimeout(mytimer);
         if (playerControl.state === YT.PlayerState.ENDED) {
-            playerControl.next();
+            if( playerControl.repeatOne ) playerControl.changeVideo();
+            else playerControl.next();
         }
     }
 }
